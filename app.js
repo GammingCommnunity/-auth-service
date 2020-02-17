@@ -11,7 +11,7 @@ const HANDLER = (req, res) => {
 	const TOKEN = req.headers["token"];
 	if (TOKEN) {
 		console.log(TOKEN);
-		res.write('AWUHAWDUGYJAWD');
+		res.write('Hello');
 	}
 	res.type("application/json");
 	res.end();
