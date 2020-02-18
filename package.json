@@ -8,9 +8,10 @@
   },
   "dependencies": {
     "body-parser": "*",
+    "cors": "^2.8.5",
     "express": "*",
-    "request": "^2.88.0",
-    "cors": "^2.8.5"
+    "jsonwebtoken": "^8.5.1",
+    "request": "^2.88.0"
   },
   "engines": {
     "node": "8.x"
