@@ -11,6 +11,7 @@
     "cors": "^2.8.5",
     "express": "*",
     "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.1",
     "request": "^2.88.0"
   },
   "engines": {
