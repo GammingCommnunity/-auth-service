@@ -1,23 +1,37 @@
- class UrlMapper {
+const METHODS = [
+	"GET",
+	"HEAD",
+	"POST",
+	"PUT",
+	"DELETE",
+	"CONNECT",
+	"OPTIONS",
+	"TRACE",
+	"PATCH"
+];
+class UrlMapper {
 	constructor() {
-		this.data = {
-			GET: [],
-			HEAD: [],
-			POST: [],
-			PUT: [],
-			DELETE: [],
-			CONNECT: [],
-			OPTIONS: [],
-			TRACE: [],
-			PATCH: []
-		};
+		this.data = [];
+		METHODS.forEach(methodName => {
+			this.data[methodName] = [];
+		});
 	}
 
 	map(method, url, controller) {
-		this.data[method.toUpperCase()].push({
-			url: url,
-			controller: controller
-		});
+		const METHOD = method.toUpperCase();
+		if (METHOD === "ALL") {
+			METHODS.forEach(methodName => {
+				this.data[methodName].push({
+					url: url,
+					controller: controller
+				});
+			});
+		} else {
+			this.data[METHOD].push({
+				url: url,
+				controller: controller
+			});
+		}
 	}
 
 	getController(method, url) {
@@ -26,6 +40,6 @@
 		);
 		return ELEMENT ? ELEMENT.controller : null;
 	}
-};
+}
 
 module.exports = UrlMapper;
