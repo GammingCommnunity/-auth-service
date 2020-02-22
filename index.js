@@ -1,12 +1,14 @@
 const HTTP = require("http");
-const REQUEST_HANDLER = require("./system/request_handler");
-const RESPONSE_HANDLER = require("./system/response_handler");
-const ROUTE = require('./app/route');
-const CORE = require("./system/core");
-const REQUEST_LISTENER = CORE.getRequestListener(
-	REQUEST_HANDLER,
-	RESPONSE_HANDLER,
-	ROUTE()
+const MONGOOSE = require("mongoose");
+const ROUTE = require("./app/route");
+const REQUEST_LISTENER = require("./system/core").getRequestListener(ROUTE());
+
+MONGOOSE.connect(
+	"mongodb+srv://root:Aa123456789Aa@cluster0-kw9wx.mongodb.net/test?retryWrites=true&w=majority",
+	{ useNewUrlParser: true, useUnifiedTopology: true },
+	error => {
+		console.log(error);
+	}
 );
 
 HTTP.createServer(REQUEST_LISTENER).listen(3000);
