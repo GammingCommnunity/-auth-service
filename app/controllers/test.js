@@ -1,5 +1,7 @@
+const RESPONSE_STATUS = require('../../system/auth_servive_response').status;
+
 module.exports = (res, fields, files) => {
-	console.log(fields);
+	res.status = RESPONSE_STATUS.SUCCESSFUL;
 	res.data = fields;
 	return res;
 };
