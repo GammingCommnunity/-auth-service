@@ -16,7 +16,7 @@ class Response {
 	}
 
 	end() {
-		let cache = [];
+		const CACHE = [];
 		this.res.writeHead(200, { "Content-Type": "application/json" });
 		this.res.write(
 			JSON.stringify(
@@ -29,12 +29,12 @@ class Response {
 					if (value === undefined) {
 						return null;
 					} else if (typeof value === "object") {
-						if (cache.indexOf(value) !== -1) {
+						if (CACHE.indexOf(value) !== -1) {
 							// Duplicate reference found, discard key
 							return;
 						}
 						// Store value in our collection
-						cache.push(value);
+						CACHE.push(value);
 					}
 					return value;
 				}
