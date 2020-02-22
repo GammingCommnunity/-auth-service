@@ -26,7 +26,9 @@ class Response {
 					describe: this.describe
 				},
 				(key, value) => {
-					if (value && typeof value === "object") {
+					if (value === undefined) {
+						return null;
+					} else if (typeof value === "object") {
 						if (cache.indexOf(value) !== -1) {
 							// Duplicate reference found, discard key
 							return;
