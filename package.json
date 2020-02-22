@@ -4,27 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "dependencies": {
-    "body-parser": "*",
-    "cors": "^2.8.5",
-    "express": "*",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.1",
-    "request": "^2.88.0"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "engines": {
     "node": "8.x"
   },
-  "repository": {
-    "url": "https://glitch.com/edit/#!/hello-express"
-  },
-  "license": "MIT",
-  "keywords": [
-    "node",
-    "glitch",
-    "express",
-    "cors"
-  ]
+  "dependencies": {
+    "formidable": "^1.2.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.2"
+  }
 }

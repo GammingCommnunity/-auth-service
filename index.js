@@ -1,12 +1,12 @@
-const EXPRESS = require("express");
-const APP = EXPRESS();
-const SERVER = require("http").createServer(APP);
-const BODY_PARSER = require("body-parser");
-const CORS = require("cors");
-const ROUTE = require("./app/route");
-const PORT = 3000;
+const HTTP = require("http");
+const REQUEST_HANDLER = require("./system/request_handler");
+const RESPONSE_HANDLER = require("./system/response_handler");
+const ROUTE = require('./app/route');
+const CORE = require("./system/core");
+const REQUEST_LISTENER = CORE.getRequestListener(
+	REQUEST_HANDLER,
+	RESPONSE_HANDLER,
+	ROUTE()
+);
 
-APP.use(CORS());
-APP.use(BODY_PARSER.json());
-SERVER.listen(PORT);
-ROUTE(APP);
+HTTP.createServer(REQUEST_LISTENER).listen(3000);
