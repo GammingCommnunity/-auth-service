@@ -1,4 +1,4 @@
-const AUTH_SERVICE_RESPONSE = require("./auth_servive_response");
+const AUTH_SERVICE_RESPONSE = require("./auth_servive_response").class;
 const FORMIDABLE = require("formidable");
 
 module.exports = (req, res, urlMapper, responseHandler) => {
