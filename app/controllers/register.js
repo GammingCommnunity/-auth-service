@@ -1,4 +1,6 @@
 const ACCOUNT = require("../models/accounts");
+const SESSION = require("../models/login_sessions");
+const JWT = require("../helpers/jwt");
 const RESPONSE_STATUS = require("../../system/response").status;
 
 module.exports = (res, fields, files) => {
@@ -34,15 +36,30 @@ module.exports = (res, fields, files) => {
 										pwd: PWD,
 										role: ROLE
 									},
-									(error, doc) => {
+									(error, account) => {
 										if (error) {
 											res.describe = error.message;
 											res.end();
 										} else {
-											res.status =
-												RESPONSE_STATUS.SUCCESSFUL;
-											res.data = doc;
-											res.end();
+											SESSION.create(
+												{},
+												(error, session) => {
+													if (error) {
+														res.describe =
+															error.message;
+														res.end();
+													} else {
+														res.status =
+															RESPONSE_STATUS.SUCCESSFUL;
+														res.data = JWT.encode(
+															session._id,
+															account._id,
+															account.role
+														);
+														res.end();
+													}
+												}
+											);
 										}
 									}
 								);
