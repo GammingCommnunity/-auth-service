@@ -1,8 +1,15 @@
 const RESPONSE_CLASS = require("./response");
 const FORMIDABLE = require("formidable");
+const LOG = require("./log");
 
-exports.getRequestListener = urlMapper => {
+exports.getRequestListener = (
+	urlMapper,
+	requestCallback = null,
+	responseCallback = null
+) => {
 	return (req, res) => {
+		if (requestCallback) requestCallback(req, res);
+
 		const RESPONSE = new RESPONSE_CLASS(res);
 		const URL = req.url.split("?")[0];
 		const METHOD = req.method.toUpperCase();
@@ -10,6 +17,8 @@ exports.getRequestListener = urlMapper => {
 
 		if (MAPPED_NODE) {
 			FORMIDABLE.IncomingForm().parse(req, (error, fields, files) => {
+				LOG.writeRequest(req, fields, files, error, true);
+
 				if (error) {
 					RESPONSE.describe = error;
 					RESPONSE.end();
@@ -22,7 +31,8 @@ exports.getRequestListener = urlMapper => {
 									RESPONSE,
 									fields,
 									files,
-									data
+									data,
+									responseCallback
 								);
 							},
 							req,
@@ -36,7 +46,8 @@ exports.getRequestListener = urlMapper => {
 							RESPONSE,
 							fields,
 							files,
-							null
+							null,
+							responseCallback
 						);
 					}
 				}
@@ -44,6 +55,7 @@ exports.getRequestListener = urlMapper => {
 		} else {
 			RESPONSE.describe = "url not found";
 			RESPONSE.end();
+			LOG.writeRequest(req, {}, {}, RESPONSE.describe, true);
 		}
 	};
 };

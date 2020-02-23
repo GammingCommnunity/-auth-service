@@ -2,7 +2,7 @@ const ACCOUNT = require("../models/accounts");
 const SESSION = require("../models/login_sessions");
 const JWT = require("../helpers/jwt");
 const CALLBACK = require("../helpers/mongoose_callback");
-const RESPONSE_STATUS = require("../../system/response").status;
+const RESPONSE_STATUS = require("../../config/response_status");
 
 module.exports = (req, res, fields, files) => {
 	const USERNAME = fields.username;
