@@ -14,7 +14,6 @@ module.exports = (req, res, fields, files) => {
 			ID,
 			CALLBACK(res, doc => {
 				if (doc) {
-					res.data = doc;
 					res.describe = "ID";
 					res.end();
 				} else {
@@ -22,7 +21,6 @@ module.exports = (req, res, fields, files) => {
 						{ username: USERNAME },
 						CALLBACK(res, docs => {
 							if (docs.length) {
-								res.data = doc;
 								res.describe = "USERNAME";
 								res.end();
 							} else {

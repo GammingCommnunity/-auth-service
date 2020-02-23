@@ -10,12 +10,7 @@ module.exports = () => {
 		require("./middlewares/service_auth")
 	);
 	MAPPER.map("GET", "/auth", require("./controllers/auth"));
-	MAPPER.map(
-		"ALL",
-		"/test",
-		require("./controllers/test"),
-		require("./middlewares/service_auth")
-	);
+	MAPPER.map("ALL", "/test", require("./controllers/test"));
 
 	return MAPPER;
 };
