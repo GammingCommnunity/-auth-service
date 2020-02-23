@@ -1,3 +1,4 @@
+const WRITE_LOG = require("../config/app").WRITE_LOG;
 const RESPONSE_CLASS = require("./response");
 const FORMIDABLE = require("formidable");
 const LOG = require("./log");
@@ -17,7 +18,8 @@ exports.getRequestListener = (
 
 		if (MAPPED_NODE) {
 			FORMIDABLE.IncomingForm().parse(req, (error, fields, files) => {
-				LOG.writeRequest(req, fields, files, error, true);
+				if (WRITE_LOG === undefined || WRITE_LOG)
+					LOG.writeRequest(req, fields, files, error, true);
 
 				if (error) {
 					RESPONSE.describe = error;
@@ -55,7 +57,8 @@ exports.getRequestListener = (
 		} else {
 			RESPONSE.describe = "url not found";
 			RESPONSE.end();
-			LOG.writeRequest(req, {}, {}, RESPONSE.describe, true);
+			if (WRITE_LOG === undefined || WRITE_LOG)
+				LOG.writeRequest(req, fields, files, error, true);
 		}
 	};
 };

@@ -1,9 +1,15 @@
 const RESPONSE_STATUS = require("../config/response_status");
+const DEFAULT_RESPONSE_STATUS = {
+	SUCCESSFUL: "SUCCESSFUL",
+	FAILED: "FAILED"
+};
 
 module.exports = class {
 	constructor(
 		res,
-		status = RESPONSE_STATUS.FAILED,
+		status = RESPONSE_STATUS.FAILED
+			? RESPONSE_STATUS.FAILED
+			: DEFAULT_RESPONSE_STATUS.FAILED,
 		data = null,
 		describe = ""
 	) {
