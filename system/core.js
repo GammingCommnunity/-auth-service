@@ -58,7 +58,7 @@ exports.getRequestListener = (
 			RESPONSE.describe = "url not found";
 			RESPONSE.end();
 			if (WRITE_LOG === undefined || WRITE_LOG)
-				LOG.writeRequest(req, fields, files, error, true);
+				LOG.writeRequest(req, {}, {}, error, true);
 		}
 	};
 };
