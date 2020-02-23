@@ -1,2 +1,4 @@
 exports.SUCCESSFUL = "SUCCESSFUL";
 exports.FAILED = "FAILED";
+exports.WRONG_PWD = "WRONG_PWD";
+exports.ACC_NOT_FOUND = "ACC_NOT_FOUND";

@@ -3,6 +3,7 @@ const SESSION = require("../models/login_sessions");
 const JWT = require("../helpers/jwt");
 const CALLBACK = require("../helpers/mongoose_callback");
 const RESPONSE_STATUS = require("../../config/response_status");
+const LOG = require("../../system/log");
 
 module.exports = (req, res, fields, files) => {
 	const USERNAME = fields.username;
@@ -14,16 +15,21 @@ module.exports = (req, res, fields, files) => {
 			ID,
 			CALLBACK(res, doc => {
 				if (doc) {
-					res.data = doc;
-					res.describe = "ID";
+					res.describe = "Duplicate id";
+					LOG.writeRequest(req, fields, files, res.describe);
 					res.end();
 				} else {
 					ACCOUNT.find(
 						{ username: USERNAME },
 						CALLBACK(res, docs => {
 							if (docs.length) {
-								res.data = doc;
-								res.describe = "USERNAME";
+								res.describe = "Duplicate username";
+								LOG.writeRequest(
+									req,
+									fields,
+									files,
+									res.describe
+								);
 								res.end();
 							} else {
 								ACCOUNT.create(
@@ -34,19 +40,31 @@ module.exports = (req, res, fields, files) => {
 										role: ROLE
 									},
 									CALLBACK(res, account => {
-										SESSION.create(
-											{},
-											CALLBACK(res, session => {
-												res.status =
-													RESPONSE_STATUS.SUCCESSFUL;
-												res.data = JWT.encode(
-													session._id,
-													account._id,
-													account.role
-												);
-												res.end();
-											})
-										);
+										if (account) {
+											SESSION.create(
+												{},
+												CALLBACK(res, session => {
+													if (session) {
+														res.status =
+															RESPONSE_STATUS.SUCCESSFUL;
+														res.data = JWT.encode(
+															session._id,
+															account._id,
+															account.role
+														);
+														res.end();
+													} else {
+														res.describe =
+															"Failed to create new session.";
+														res.end();
+													}
+												})
+											);
+										} else {
+											res.describe =
+												"Failed to create new account.";
+											res.end();
+										}
 									})
 								);
 							}
@@ -56,7 +74,7 @@ module.exports = (req, res, fields, files) => {
 			})
 		);
 	} else {
-		res.describe = "missing some account info";
+		res.describe = "Missing some account info.";
 		res.end();
 	}
 };
