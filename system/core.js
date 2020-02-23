@@ -18,8 +18,9 @@ exports.getRequestListener = (
 
 		if (MAPPED_NODE) {
 			FORMIDABLE.IncomingForm().parse(req, (error, fields, files) => {
-				if (WRITE_LOG === undefined || WRITE_LOG)
+				if (WRITE_LOG === undefined || WRITE_LOG) {
 					LOG.writeRequest(req, fields, files, error, true);
+				}
 
 				if (error) {
 					RESPONSE.describe = error;
@@ -55,10 +56,10 @@ exports.getRequestListener = (
 				}
 			});
 		} else {
-			RESPONSE.describe = "url not found";
-			RESPONSE.end();
-			if (WRITE_LOG === undefined || WRITE_LOG)
-				LOG.writeRequest(req, {}, {}, RESPONSE.describe, true);
+			if (WRITE_LOG === undefined || WRITE_LOG) {
+				LOG.writeRequest(req, {}, {}, "url not found", true);
+			}
+			RESPONSE.notFoundResponse();
 		}
 	};
 };

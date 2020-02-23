@@ -6,8 +6,6 @@ module.exports = (next, req, res, fields, files) => {
 		next();
 	} else {
 		LOG.writeRequest(req, fields, files, "access denied");
-		const RESPONSE = res.getResponse();
-		RESPONSE.writeHead(403);
-		RESPONSE.end();
+		res.forbiddenResponse();
 	}
 };

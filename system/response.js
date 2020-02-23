@@ -50,4 +50,13 @@ module.exports = class {
 	getResponse() {
 		return this.res;
 	}
+
+	forbiddenResponse(){
+		this.res.writeHead(403);
+		this.res.end();
+	}
+	notFoundResponse(){
+		this.res.writeHead(404);
+		this.res.end();
+	}
 };
