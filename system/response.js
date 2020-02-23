@@ -15,9 +15,9 @@ class Response {
 		this.describe = describe;
 	}
 
-	end() {
+	end(status = 200) {
 		const CACHE = [];
-		this.res.writeHead(200, { "Content-Type": "application/json" });
+		this.res.writeHead(status, { "Content-Type": "application/json" });
 		this.res.write(
 			JSON.stringify(
 				{
@@ -41,6 +41,10 @@ class Response {
 			)
 		);
 		this.res.end();
+	}
+
+	getResponse() {
+		return this.res;
 	}
 }
 

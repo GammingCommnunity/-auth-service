@@ -5,7 +5,7 @@ module.exports = () => {
 	MAPPER.map("POST", "/login", require("./controllers/login"));
 	MAPPER.map("POST", "/register", require("./controllers/register"));
 	MAPPER.map("GET", "/auth", require("./controllers/auth"));
-	MAPPER.map("GET", "/test", require("./controllers/test"));
+	MAPPER.map("ALL", "/test", require("./controllers/test"), require('./middlewares/service_auth'));
 
 	return MAPPER;
 };
