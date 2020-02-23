@@ -1,4 +1,4 @@
-const RESPONSE_CLASS = require("./response").class;
+const RESPONSE_CLASS = require("./response");
 const FORMIDABLE = require("formidable");
 
 exports.getRequestListener = urlMapper => {

@@ -1,11 +1,11 @@
-require("dotenv").config();
+const DB_CONNECTION_STRING = require("./config/app").DB_CONNECTION_STRING;
 const HTTP = require("http");
 const MONGOOSE = require("mongoose");
 const ROUTE = require("./app/route");
 const REQUEST_LISTENER = require("./system/core").getRequestListener(ROUTE());
 
 MONGOOSE.connect(
-	process.env.DB_CONNECTION_STRING,
+	DB_CONNECTION_STRING,
 	{ useNewUrlParser: true, useUnifiedTopology: true },
 	error => {
 		if (error) console.log(error);

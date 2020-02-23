@@ -1,11 +1,9 @@
-const ResponseStatus = {
-	SUCCESSFUL: "SUCCESSFUL",
-	FAILED: "FAILED"
-};
-class Response {
+const RESPONSE_STATUS = require("../config/response_status");
+
+module.exports = class {
 	constructor(
 		res,
-		status = ResponseStatus.FAILED,
+		status = RESPONSE_STATUS.FAILED,
 		data = null,
 		describe = ""
 	) {
@@ -46,7 +44,4 @@ class Response {
 	getResponse() {
 		return this.res;
 	}
-}
-
-exports.class = Response;
-exports.status = ResponseStatus;
+};
