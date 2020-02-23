@@ -21,18 +21,23 @@ exports.writeRequest = (
 	displayOnConsole = false
 ) => {
 	const DATE_NOW = new Date().toLocaleString(LOCALE ? LOCALE : "vi-VN");
-	const DATA = {
-		header: req.headers,
-		form_data: formData,
-		files: files,
-		error: error
-	};
 	const CONTENT =
-		`[${DATE_NOW}] ${req.method} - ${req.url}` +
-		`\n${JSON.stringify(DATA, null, 4)}\n\n\n`;
+		JSON.stringify(
+			{
+				head: `[${DATE_NOW}] ${req.method} - ${req.url}`,
+				body: {
+					header: req.headers,
+					form_data: formData,
+					files: files,
+					error: error
+				}
+			},
+			null,
+			4
+		) + ",\n";
 
 	FS.appendFile(
-		"log.txt",
+		".log",
 		CONTENT,
 		LOG_ERROR_HANDLE(() => {
 			if (displayOnConsole) {
@@ -51,7 +56,7 @@ exports.write = (text, displayOnConsole = false) => {
 		}`;
 
 		FS.appendFile(
-			"log.txt",
+			".log",
 			CONTENT,
 			LOG_ERROR_HANDLE(() => {
 				if (displayOnConsole) {

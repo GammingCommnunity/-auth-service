@@ -15,7 +15,7 @@ module.exports = (req, res, fields, files) => {
 			ID,
 			CALLBACK(res, doc => {
 				if (doc) {
-					res.describe = "Duplicate id";
+					res.describe = "Duplicate id.";
 					LOG.writeRequest(req, fields, files, res.describe);
 					res.end();
 				} else {
@@ -23,7 +23,7 @@ module.exports = (req, res, fields, files) => {
 						{ username: USERNAME },
 						CALLBACK(res, docs => {
 							if (docs.length) {
-								res.describe = "Duplicate username";
+								res.describe = "Duplicate username.";
 								LOG.writeRequest(
 									req,
 									fields,

@@ -2,4 +2,4 @@
 /history
 .gitinore
 autopush.cmd
-log.txt
+.log
