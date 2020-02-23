@@ -5,7 +5,7 @@ const CONSOLE_COLOR = require("./consolelog_color");
 const LOG_ERROR_HANDLE = notErrorCallback => {
 	return error => {
 		if (error) {
-			CONSOLE_COLOR.red("Log writing error:\n");
+			CONSOLE_COLOR.red("Log writing error:");
 			console.log(error);
 		} else {
 			notErrorCallback();
@@ -46,7 +46,9 @@ exports.writeRequest = (
 exports.write = (text, displayOnConsole = false) => {
 	if (text) {
 		const DATE_NOW = new Date().toLocaleString(LOCALE ? LOCALE : "vi-VN");
-		const CONTENT = `[${DATE_NOW}] message:\n${text}`;
+		const CONTENT = `[${DATE_NOW}] message:\n${
+			typeof text === "object" ? JSON.stringify(text, null, 4) : text
+		}`;
 
 		FS.appendFile(
 			"log.txt",
@@ -54,7 +56,7 @@ exports.write = (text, displayOnConsole = false) => {
 			LOG_ERROR_HANDLE(() => {
 				if (displayOnConsole) {
 					//display a little bit of request info
-					CONSOLE_COLOR.green(`[${DATE_NOW}] message:\n`);
+					CONSOLE_COLOR.green(`[${DATE_NOW}] message:`);
 					console.log(text);
 				}
 			})
