@@ -1,6 +1,6 @@
 const ACCOUNT = require("../models/accounts");
 const CALLBACK = require("../helpers/mongoose_callback");
-const BCRYPT = require("bcrypt");
+const BCRYPT = require("bcrypt-nodejs");
 const RESPONSE_STATUS = require("../../config/response_status");
 const SESSION = require("../models/login_sessions");
 const JWT = require("../helpers/jwt");
