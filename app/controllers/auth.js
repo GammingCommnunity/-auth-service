@@ -9,11 +9,11 @@ module.exports = (req, res, fields, files) => {
 		if (DECODED) {
 			res.status = RESPONSE_STATUS.SUCCESSFUL;
 		} else {
-			res.describe = "wrong token";
+			res.describe = "Wrong token.";
 			LOG.writeRequest(req, fields, files, res.describe);
 		}
 	} else {
-		res.describe = "missing the token";
+		res.describe = "Missing the token.";
 		LOG.writeRequest(req, fields, files, res.describe);
 	}
 
