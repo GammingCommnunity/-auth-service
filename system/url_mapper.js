@@ -17,28 +17,29 @@ class UrlMapper {
 		});
 	}
 
-	map(method, url, controller) {
+	map(method, url, controller, middleware = null) {
 		const METHOD = method.toUpperCase();
 		if (METHOD === "ALL") {
 			METHODS.forEach(methodName => {
 				this.data[methodName].push({
 					url: url,
-					controller: controller
+					controller: controller,
+					middleware: middleware
 				});
 			});
 		} else {
 			this.data[METHOD].push({
 				url: url,
-				controller: controller
+				controller: controller,
+				middleware: middleware
 			});
 		}
 	}
 
-	getController(method, url) {
-		const ELEMENT = this.data[method.toUpperCase()].find(
+	getANode(method, url) {
+		return this.data[method.toUpperCase()].find(
 			element => element.url === url
 		);
-		return ELEMENT ? ELEMENT.controller : null;
 	}
 }
 
