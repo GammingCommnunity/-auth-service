@@ -33,8 +33,7 @@ exports.getRequestListener = (
 				}
 
 				if (error) {
-					RESPONSE.describe = error;
-					RESPONSE.end();
+					RESPONSE.end(RESPONSE_STATUS.FAILED, null, error);
 				} else {
 					if (MAPPED_NODE.middleware) {
 						MAPPED_NODE.middleware(
