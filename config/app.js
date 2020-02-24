@@ -8,5 +8,6 @@ exports.PRIVATE_KEY = `9-k~$t}#gi^0<{v >1k*PZg[n./t0K~Zd3[duN|gmpnJ8FN&Fe_8C(h^D
 
 //system
 exports.WRITE_LOG = true;
+exports.DEBUG = true;
 exports.LOCALE = 'vi-VN';
 

@@ -19,14 +19,20 @@ const CREATE = (res, username, pwd, id, role, successCallback) => {
 			SUCCESS_CALLBACK(
 				res,
 				"",
-				() => res.conflictResponse(),
+				() => {
+					res.describe = "Duplicate id.";
+					res.end();
+				},
 				() => {
 					ACCOUNT.find(
 						{ username: username },
 						SUCCESS_CALLBACK(
 							res,
 							"",
-							() => res.conflictResponse(),
+							() => {
+								res.describe = "Duplicate username.";
+								res.end();
+							},
 							() => {
 								ACCOUNT.create(
 									{

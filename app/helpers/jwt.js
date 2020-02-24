@@ -26,9 +26,10 @@ const GENERATE = (res, accountId, accountRole) => {
 			account_id: accountId
 		},
 		SUCCESS_CALLBACK(res, "Failed to create new session.", session => {
-			res.status = RESPONSE_STATUS.SUCCESSFUL;
-			res.data = ENCODE(session._id, accountId, accountRole);
-			res.end();
+			res.end(
+				RESPONSE_STATUS.SUCCESSFUL,
+				ENCODE(session._id, accountId, accountRole)
+			);
 		})
 	);
 };
