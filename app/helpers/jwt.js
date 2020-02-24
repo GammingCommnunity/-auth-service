@@ -1,17 +1,38 @@
 const JWT = require("jsonwebtoken");
-const AUTH_KEY = require("../../config/app").AUTH_KEY;
+const PRIVATE_KEY = require("../../config/app").PRIVATE_KEY;
+const LOGIN_SESSION = require("../models/login_sessions");
+const RESPONSE_STATUS = require("../../config/response_status");
+const SUCCESS_CALLBACK = require("../helpers/mongoose_callback")
+	.successCallback;
 
-exports.encode = (sessionCode, accountId, role) => {
-	return JWT.sign({ ss: sessionCode, id: accountId, rl: role }, AUTH_KEY, {
+const ENCODE = (sessionCode, accountId, role) => {
+	return JWT.sign({ ss: sessionCode, id: accountId, rl: role }, PRIVATE_KEY, {
 		algorithm: "HS512",
 		noTimestamp: true
 	});
 };
 
-exports.decode = token => {
+const DECODE = token => {
 	let decoded = null;
 	try {
-		decoded = JWT.verify(token, AUTH_KEY);
+		decoded = JWT.verify(token, PRIVATE_KEY);
 	} catch (error) {}
 	return decoded;
 };
+
+const GENERATE = (res, accountId, accountRole) => {
+	LOGIN_SESSION.model.create(
+		{
+			account_id: accountId
+		},
+		SUCCESS_CALLBACK(res, "Failed to create new session.", session => {
+			res.status = RESPONSE_STATUS.SUCCESSFUL;
+			res.data = ENCODE(session._id, accountId, accountRole);
+			res.end();
+		})
+	);
+};
+
+exports.encode = ENCODE;
+exports.decode = DECODE;
+exports.generate = GENERATE;

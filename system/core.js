@@ -2,6 +2,7 @@ const WRITE_LOG = require("../config/app").WRITE_LOG;
 const RESPONSE_CLASS = require("./response");
 const FORMIDABLE = require("formidable");
 const LOG = require("./log");
+const URL_PARSE = require("url").parse;
 
 exports.getRequestListener = (
 	urlMapper,
@@ -9,7 +10,9 @@ exports.getRequestListener = (
 	responseCallback = null
 ) => {
 	return (req, res) => {
-		if (requestCallback) requestCallback(req, res);
+		if (requestCallback) {
+			requestCallback(req, res);
+		}
 
 		const RESPONSE = new RESPONSE_CLASS(res);
 		const URL = req.url.split("?")[0];
@@ -18,6 +21,13 @@ exports.getRequestListener = (
 
 		if (MAPPED_NODE) {
 			FORMIDABLE.IncomingForm().parse(req, (error, fields, files) => {
+				if (req.url.includes("?")) {
+					fields = Object.assign(
+						URL_PARSE(req.url, true).query,
+						fields
+					);
+				}
+
 				if (WRITE_LOG === undefined || WRITE_LOG) {
 					LOG.writeRequest(req, fields, files, error, true);
 				}
@@ -57,7 +67,7 @@ exports.getRequestListener = (
 			});
 		} else {
 			if (WRITE_LOG === undefined || WRITE_LOG) {
-				LOG.writeRequest(req, {}, {}, "url not found", true);
+				LOG.writeRequest(req, {}, {}, "404 Not Found.", true);
 			}
 			RESPONSE.notFoundResponse();
 		}

@@ -1,3 +1,4 @@
+const JSON_HELPER = require("./json_helper");
 const RESPONSE_STATUS = require("../config/response_status");
 const DEFAULT_RESPONSE_STATUS = {
 	SUCCESSFUL: "SUCCESSFUL",
@@ -20,29 +21,13 @@ module.exports = class {
 	}
 
 	end(status = 200) {
-		const CACHE = [];
 		this.res.writeHead(status, { "Content-Type": "application/json" });
 		this.res.write(
-			JSON.stringify(
-				{
-					status: this.status,
-					data: this.data,
-					describe: this.describe
-				},
-				(key, value) => {
-					if (value === undefined) {
-						return null;
-					} else if (typeof value === "object") {
-						if (CACHE.indexOf(value) !== -1) {
-							// Duplicate reference found, discard key
-							return;
-						}
-						// Store value in our collection
-						CACHE.push(value);
-					}
-					return value;
-				}
-			)
+			JSON_HELPER.encode({
+				status: this.status,
+				data: this.data,
+				describe: this.describe
+			})
 		);
 		this.res.end();
 	}
@@ -51,12 +36,16 @@ module.exports = class {
 		return this.res;
 	}
 
-	forbiddenResponse(){
+	forbiddenResponse() {
 		this.res.writeHead(403);
 		this.res.end();
 	}
-	notFoundResponse(){
+	notFoundResponse() {
 		this.res.writeHead(404);
+		this.res.end();
+	}
+	conflictResponse() {
+		this.res.writeHead(419);
 		this.res.end();
 	}
 };
