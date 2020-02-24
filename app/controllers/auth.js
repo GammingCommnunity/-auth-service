@@ -18,50 +18,50 @@ module.exports = (req, res, fields, files) => {
 						if (session) {
 							if (session.account_id === ACCOUNT_ID) {
 								if (session.is_active) {
-									res.status = RESPONSE_STATUS.SUCCESSFUL;
-									res.end();
+									res.end(RESPONSE_STATUS.SUCCESSFUL);
 								} else {
-									res.status =
-										RESPONSE_STATUS.SESSION_EXPIRED;
-									res.end();
+									res.end(RESPONSE_STATUS.SESSION_EXPIRED);
 								}
 							} else {
-								res.describe = "Fake account.";
 								LOG.writeRequest(req, fields, files, {
-									message: res.describe,
+									message: "Fake account.",
 									token: TOKEN
 								});
-								res.end();
+								res.end(
+									RESPONSE_STATUS.FAILED,
+									null,
+									"Fake account."
+								);
 							}
 						} else {
-							res.describe = "Session not found";
 							LOG.writeRequest(req, fields, files, {
-								message: res.describe,
+								message: "Session not found",
 								token: TOKEN
 							});
-							res.end();
+							res.end(
+								RESPONSE_STATUS.FAILED,
+								null,
+								"Session not found"
+							);
 						}
 					})
 				);
 			} else {
-				res.describe = "Token format error.";
 				LOG.writeRequest(req, fields, files, {
-					message: res.describe,
+					message: "Token format error.",
 					token: TOKEN
 				});
-				res.end();
+				res.end(RESPONSE_STATUS.FAILED, null, "Token format error.");
 			}
 		} else {
-			res.describe = "Wrong token.";
 			LOG.writeRequest(req, fields, files, {
-				message: res.describe,
+				message: "Wrong token.",
 				token: TOKEN
 			});
-			res.end();
+			res.end(RESPONSE_STATUS.FAILED, null, "Wrong token.");
 		}
 	} else {
-		res.describe = "Missing the token.";
-		LOG.writeRequest(req, fields, files, res.describe);
-		res.end();
+		LOG.writeRequest(req, fields, files, "Missing the token.");
+		res.end(RESPONSE_STATUS.FAILED, null, "Missing the token.");
 	}
 };

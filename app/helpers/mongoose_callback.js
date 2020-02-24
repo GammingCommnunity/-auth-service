@@ -1,8 +1,9 @@
+const RESPONSE_STATUS = require("../../config/response_status");
+
 exports.callback = (res, callback) => {
 	return (error, docs) => {
 		if (error) {
-			res.describe = error.message;
-			res.end();
+			res.end(RESPONSE_STATUS.FAILED, null, error.message);
 		} else {
 			callback(docs);
 		}
@@ -12,8 +13,7 @@ exports.callback = (res, callback) => {
 exports.successCallback = (res, message, callback, notFoundCallback = null) => {
 	return (error, docs) => {
 		if (error) {
-			res.describe = error.message;
-			res.end();
+			res.end(RESPONSE_STATUS.FAILED, null, error.message);
 		} else {
 			if (
 				docs &&
@@ -26,8 +26,7 @@ exports.successCallback = (res, message, callback, notFoundCallback = null) => {
 				if (notFoundCallback) {
 					notFoundCallback();
 				} else {
-					res.describe = message;
-					res.end();
+					res.end(RESPONSE_STATUS.FAILED, null, error.message);
 				}
 			}
 		}

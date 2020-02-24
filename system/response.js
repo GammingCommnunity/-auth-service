@@ -1,32 +1,38 @@
 const JSON_HELPER = require("./json_helper");
 const RESPONSE_STATUS = require("../config/response_status");
+const CRYPTO = require("crypto");
+const DEBUG_MODE = require("../config/app").DEBUG;
 const DEFAULT_RESPONSE_STATUS = {
 	SUCCESSFUL: "SUCCESSFUL",
 	FAILED: "FAILED"
 };
 
 module.exports = class {
-	constructor(
-		res,
+	constructor(res) {
+		this.res = res;
+	}
+
+	end(
 		status = RESPONSE_STATUS.FAILED
 			? RESPONSE_STATUS.FAILED
 			: DEFAULT_RESPONSE_STATUS.FAILED,
 		data = null,
-		describe = ""
+		describe = "",
+		responseStatus = 200
 	) {
-		this.res = res;
-		this.status = status;
-		this.data = data;
-		this.describe = describe;
-	}
-
-	end(status = 200) {
-		this.res.writeHead(status, { "Content-Type": "application/json" });
+		const IS_DEBUG_MODE = DEBUG_MODE === undefined || DEBUG_MODE;
+		this.res.writeHead(responseStatus, {
+			"Content-Type": "application/json"
+		});
 		this.res.write(
 			JSON_HELPER.encode({
-				status: this.status,
-				data: this.data,
-				describe: this.describe
+				status: status,
+				data: data,
+				describe: IS_DEBUG_MODE
+					? describe
+					: CRYPTO.createHash("sha256")
+							.update(describe)
+							.digest("hex")
 			})
 		);
 		this.res.end();
