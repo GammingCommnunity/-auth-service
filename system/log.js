@@ -1,6 +1,7 @@
 const FS = require("fs");
 const LOCALE = require("../config/app").LOCALE;
 const CONSOLE_COLOR = require("./consolelog_color");
+const JSON_HELPER = require("./json_helper");
 
 const LOG_ERROR_HANDLE = notErrorCallback => {
 	return error => {
@@ -22,45 +23,58 @@ exports.writeRequest = (
 ) => {
 	const DATE_NOW = new Date().toLocaleString(LOCALE ? LOCALE : "vi-VN");
 	const CONTENT =
-		JSON.stringify(
+		JSON_HELPER.encode(
 			{
-				head: `[${DATE_NOW}] ${req.method} - ${req.url}`,
+				head: {
+					date: DATE_NOW,
+					method: req.method,
+					url: req.url.split("?")[0],
+					type: "writeRequest"
+				},
 				body: {
 					header: req.headers,
-					form_data: formData,
+					fields: formData,
 					files: files,
 					error: error
 				}
 			},
-			null,
 			4
-		) + ",\n";
+		) + ",\n\n";
 
 	FS.appendFile(
 		".log",
 		CONTENT,
 		LOG_ERROR_HANDLE(() => {
 			if (displayOnConsole) {
-				//display a little bit of request info
-				CONSOLE_COLOR.green(`[${DATE_NOW}] ${req.method} - ${req.url}`);
+				// Display a little bit of request info
+				CONSOLE_COLOR.green(
+					`[${DATE_NOW}] ${req.method} - ${req.url.split("?")[0]}`
+				);
 			}
 		})
 	);
 };
 
-exports.write = (text, displayOnConsole = false) => {
-	if (text) {
+exports.write = (content, displayOnConsole = false) => {
+	if (content) {
 		const DATE_NOW = new Date().toLocaleString(LOCALE ? LOCALE : "vi-VN");
-		const CONTENT = `[${DATE_NOW}] message:\n${
-			typeof text === "object" ? JSON.stringify(text, null, 4) : text
-		}`;
+		const CONTENT =
+			JSON_HELPER.encode(
+				{
+					head: {
+						date: DATE_NOW,
+						type: "write"
+					},
+					body: content
+				},
+				4
+			) + ",\n\n";
 
 		FS.appendFile(
 			".log",
 			CONTENT,
 			LOG_ERROR_HANDLE(() => {
 				if (displayOnConsole) {
-					//display a little bit of request info
 					CONSOLE_COLOR.green(`[${DATE_NOW}] message:`);
 					console.log(text);
 				}
