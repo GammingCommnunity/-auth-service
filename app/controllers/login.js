@@ -30,13 +30,14 @@ module.exports = (req, res, fields, files) => {
 						}
 					});
 				},
-				() => {
-					res.end(RESPONSE_STATUS.WRONG_USERNAME);
-				}
+				() => res.end(RESPONSE_STATUS.WRONG_USERNAME)
 			)
 		);
 	} else {
-		res.describe = "Missing the username or password.";
-		res.end();
+		res.end(
+			RESPONSE_STATUS.FAILED,
+			null,
+			"Missing the username or password."
+		);
 	}
 };

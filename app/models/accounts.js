@@ -1,4 +1,5 @@
 const MONGOOSE = require("mongoose");
+const RESPONSE_STATUS = require("../../config/response_status");
 const SUCCESS_CALLBACK = require("../helpers/mongoose_callback")
 	.successCallback;
 
@@ -19,20 +20,19 @@ const CREATE = (res, username, pwd, id, role, successCallback) => {
 			SUCCESS_CALLBACK(
 				res,
 				"",
-				() => {
-					res.describe = "Duplicate id.";
-					res.end();
-				},
+				() => res.end(RESPONSE_STATUS.FAILED, null, "Duplicate id."),
 				() => {
 					ACCOUNT.find(
 						{ username: username },
 						SUCCESS_CALLBACK(
 							res,
 							"",
-							() => {
-								res.describe = "Duplicate username.";
-								res.end();
-							},
+							() =>
+								res.end(
+									RESPONSE_STATUS.FAILED,
+									null,
+									"Duplicate username."
+								),
 							() => {
 								ACCOUNT.create(
 									{
@@ -54,8 +54,7 @@ const CREATE = (res, username, pwd, id, role, successCallback) => {
 			)
 		);
 	} else {
-		res.describe = "Missing some account info.";
-		res.end();
+		res.end(RESPONSE_STATUS.FAILED, null, "Missing some account info.");
 	}
 };
 
