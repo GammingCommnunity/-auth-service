@@ -37,13 +37,13 @@ exports.getRequestListener = (
 				} else {
 					if (MAPPED_NODE.middleware) {
 						MAPPED_NODE.middleware(
-							data => {
+							middlewareData => {
 								MAPPED_NODE.controller(
 									req,
 									RESPONSE,
 									fields,
 									files,
-									data,
+									middlewareData,
 									responseCallback
 								);
 							},

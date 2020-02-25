@@ -3,18 +3,17 @@ const RESPONSE_STATUS = require("../../config/response_status");
 const SUCCESS_CALLBACK = require("../helpers/mongoose_callback")
 	.successCallback;
 
-const ACCOUNT = MONGOOSE.model(
-	"Accounts",
-	MONGOOSE.Schema({
-		_id: Number,
-		username: String,
-		pwd: String,
-		role: Number
-	})
-);
+const SCHEMA = MONGOOSE.Schema({
+	_id: Number,
+	username: String,
+	pwd: String,
+	role: Number,
+	status: Number
+});
+const ACCOUNT = MONGOOSE.model("Accounts", SCHEMA);
 
-const CREATE = (res, username, pwd, id, role, successCallback) => {
-	if (username && pwd && id && role) {
+const CREATE = (res, username, pwd, id, role, status, successCallback) => {
+	if (username && pwd && id && role && status) {
 		ACCOUNT.findById(
 			id,
 			SUCCESS_CALLBACK(
@@ -39,7 +38,8 @@ const CREATE = (res, username, pwd, id, role, successCallback) => {
 										_id: id,
 										username: username,
 										pwd: pwd,
-										role: role
+										role: role,
+										status: status
 									},
 									SUCCESS_CALLBACK(
 										res,
@@ -58,5 +58,6 @@ const CREATE = (res, username, pwd, id, role, successCallback) => {
 	}
 };
 
+exports.schema = SCHEMA;
 exports.model = ACCOUNT;
 exports.create = CREATE;
