@@ -76,7 +76,7 @@ exports.write = (content, displayOnConsole = false) => {
 			LOG_ERROR_HANDLE(() => {
 				if (displayOnConsole) {
 					CONSOLE_COLOR.green(`[${DATE_NOW}] message:`);
-					console.log(text);
+					console.log(content);
 				}
 			})
 		);

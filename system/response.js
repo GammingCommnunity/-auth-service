@@ -1,6 +1,6 @@
 const JSON_HELPER = require("./json_helper");
 const RESPONSE_STATUS = require("../config/response_status");
-const CRYPTO = require("crypto");
+const SHA256 = require("sha256");
 const DEBUG_MODE = require("../config/app").DEBUG;
 const DEFAULT_RESPONSE_STATUS = {
 	SUCCESSFUL: "SUCCESSFUL",
@@ -28,20 +28,12 @@ module.exports = class {
 			JSON_HELPER.encode({
 				status: status,
 				data: data,
-				describe: IS_DEBUG_MODE
-					? describe
-					: CRYPTO.createHash("sha256")
-							.update(describe)
-							.digest("hex")
+				describe: IS_DEBUG_MODE ? describe : SHA256(describe)
 			})
 		);
 		this.res.end();
 	}
-
-	getResponse() {
-		return this.res;
-	}
-
+	
 	forbiddenResponse() {
 		this.res.writeHead(403);
 		this.res.end();

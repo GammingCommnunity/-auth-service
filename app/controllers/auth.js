@@ -1,7 +1,8 @@
 const JWT = require("../helpers/jwt");
 const LOG = require("../../system/log");
 const RESPONSE_STATUS = require("../../config/response_status");
-const LOGIN_SESSION = require("../models/login_sessions");
+const ACCOUNT_STATUS = require("../common/enums").AccountStatus;
+const LOGIN_SESSIONS = require("../models/login_sessions");
 const CALLBACK = require("../helpers/mongoose_callback").callback;
 
 module.exports = (req, res, fields, files) => {
@@ -9,29 +10,15 @@ module.exports = (req, res, fields, files) => {
 	if (TOKEN) {
 		const DECODED = JWT.decode(TOKEN);
 		if (DECODED) {
-			const SESSION_ID = DECODED.ss;
-			const ACCOUNT_ID = DECODED.id;
-			if (SESSION_ID && ACCOUNT_ID) {
-				LOGIN_SESSION.model.findById(
-					SESSION_ID,
+			if (DECODED.accountStatus === ACCOUNT_STATUS.ACTIVATED) {
+				LOGIN_SESSIONS.model.findById(
+					DECODED.sessionId,
 					CALLBACK(res, session => {
 						if (session) {
-							if (session.account_id === ACCOUNT_ID) {
-								if (session.is_active) {
-									res.end(RESPONSE_STATUS.SUCCESSFUL);
-								} else {
-									res.end(RESPONSE_STATUS.SESSION_EXPIRED);
-								}
+							if (session.is_active) {
+								res.end(RESPONSE_STATUS.SUCCESSFUL);
 							} else {
-								LOG.writeRequest(req, fields, files, {
-									message: "Fake account.",
-									token: TOKEN
-								});
-								res.end(
-									RESPONSE_STATUS.FAILED,
-									null,
-									"Fake account."
-								);
+								res.end(RESPONSE_STATUS.SESSION_EXPIRED);
 							}
 						} else {
 							LOG.writeRequest(req, fields, files, {
@@ -46,12 +33,20 @@ module.exports = (req, res, fields, files) => {
 						}
 					})
 				);
+			} else if (DECODED.accountStatus === ACCOUNT_STATUS.BANNED) {
+				res.end(RESPONSE_STATUS.IS_BANNED_ACCOUNT);
+			} else if (DECODED.accountStatus === ACCOUNT_STATUS.UNACTIVATED) {
+				res.end(RESPONSE_STATUS.IS_UNACTIVATED_ACCOUNT);
 			} else {
 				LOG.writeRequest(req, fields, files, {
-					message: "Token format error.",
-					token: TOKEN
+					message: "Account statuses error.",
+					status: DECODED.accountStatus
 				});
-				res.end(RESPONSE_STATUS.FAILED, null, "Token format error.");
+				res.end(
+					RESPONSE_STATUS.FAILED,
+					null,
+					"Account statuses error."
+				);
 			}
 		} else {
 			LOG.writeRequest(req, fields, files, {

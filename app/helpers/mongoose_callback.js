@@ -1,8 +1,10 @@
 const RESPONSE_STATUS = require("../../config/response_status");
+const LOG = require("../../system/log");
 
 exports.callback = (res, callback) => {
 	return (error, docs) => {
 		if (error) {
+			LOG.write(error, true);
 			res.end(RESPONSE_STATUS.FAILED, null, error.message);
 		} else {
 			callback(docs);
@@ -13,6 +15,7 @@ exports.callback = (res, callback) => {
 exports.successCallback = (res, message, callback, notFoundCallback = null) => {
 	return (error, docs) => {
 		if (error) {
+			LOG.write(error, true);
 			res.end(RESPONSE_STATUS.FAILED, null, error.message);
 		} else {
 			if (
