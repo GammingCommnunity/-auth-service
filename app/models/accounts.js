@@ -1,5 +1,6 @@
 const MONGOOSE = require("mongoose");
 const RESPONSE_STATUS = require("../../config/response_status");
+const BCRYPT = require("bcryptjs");
 const SUCCESS_CALLBACK = require("../helpers/mongoose_callback")
 	.successCallback;
 
@@ -37,7 +38,7 @@ const CREATE = (res, username, pwd, id, role, status, successCallback) => {
 									{
 										_id: id,
 										username: username,
-										pwd: pwd,
+										pwd: BCRYPT.hashSync(pwd, 10),
 										role: role,
 										status: status
 									},
