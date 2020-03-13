@@ -15,7 +15,6 @@ module.exports = (req, res, fields, files) => {
 			{ username: USERNAME },
 			SUCCESS_CALLBACK(
 				res,
-				"",
 				account => {
 					if (account.status === ACCOUNT_STATUS.ACTIVATED) {
 						BCRYPT.compare(PWD, account.pwd, (error, result) => {

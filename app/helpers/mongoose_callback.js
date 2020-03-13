@@ -12,7 +12,7 @@ exports.callback = (res, callback) => {
 	};
 };
 
-exports.successCallback = (res, message, callback, notFoundCallback = null) => {
+exports.successCallback = (res, callback, notFoundCallback = null) => {
 	return (error, docs) => {
 		if (error) {
 			LOG.write(error, true);
