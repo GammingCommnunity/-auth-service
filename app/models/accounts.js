@@ -19,14 +19,12 @@ const CREATE = (res, username, pwd, id, role, status, successCallback) => {
 			id,
 			SUCCESS_CALLBACK(
 				res,
-				"",
 				() => res.end(RESPONSE_STATUS.FAILED, null, "Duplicate id."),
 				() => {
 					ACCOUNT.find(
 						{ username: username },
 						SUCCESS_CALLBACK(
 							res,
-							"",
 							() =>
 								res.end(
 									RESPONSE_STATUS.FAILED,
@@ -44,8 +42,13 @@ const CREATE = (res, username, pwd, id, role, status, successCallback) => {
 									},
 									SUCCESS_CALLBACK(
 										res,
-										"Failed to create new account.",
-										account => successCallback(account)
+										account => successCallback(account),
+										() =>
+											res.end(
+												RESPONSE_STATUS.FAILED,
+												null,
+												"Failed to create new account."
+											)
 									)
 								);
 							}

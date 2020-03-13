@@ -16,7 +16,7 @@ module.exports = (req, res, fields, files) => {
 					CALLBACK(res, session => {
 						if (session) {
 							if (session.is_active) {
-								res.end(RESPONSE_STATUS.SUCCESSFUL);
+								res.end(RESPONSE_STATUS.SUCCESSFUL, DECODED);
 							} else {
 								res.end(RESPONSE_STATUS.SESSION_EXPIRED);
 							}
